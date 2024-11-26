@@ -1,5 +1,5 @@
 # Database Image with Slurm
-FROM docker pull ghcr.io/logicalisuki/slurm-containers/slurm-base:latest
+FROM ghcr.io/logicalisuki/slurm-containers/slurm-base:latest
 
 # Install MariaDB server and client
 RUN apt-get update && apt-get install -y \

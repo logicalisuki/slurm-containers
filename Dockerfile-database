@@ -1,0 +1,15 @@
+# Database Image with Slurm
+FROM slurm-base AS slurm-database
+
+# Install MariaDB server and client
+RUN apt-get update && apt-get install -y \
+    mariadb-server \
+    mariadb-client && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Expose ports for MariaDB and slurmdbd
+EXPOSE 3306 6819
+
+# Start MariaDB and slurmdbd
+CMD ["bash", "-c", "mysqld_safe & sleep 5 && slurmdbd"]

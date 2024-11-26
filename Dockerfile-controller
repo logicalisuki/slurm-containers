@@ -1,5 +1,5 @@
 # Controller Image
-FROM slurm-base AS slurm-controller
+FROM docker pull ghcr.io/logicalisuki/slurm-containers/slurm-base:latest
 
 # Additional dependencies for the controller
 RUN apt-get update && apt-get install -y \

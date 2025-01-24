@@ -8,14 +8,11 @@ name: Docker
 on:
   # schedule:
   #   - cron: '24 3 * * *'
-  workflow_dispatch:
-  push:
-    branches: [ "main" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: [ "main" ]
-
+  workflow_run:
+    workflows: ["Dockerhub Publish"]
+    types:
+      - completed
+  
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
@@ -94,4 +91,14 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ github.repository }}/slurm-worker:${{ github.event.release.tag_name || 'latest' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      
+
+      - name: Build and push Login
+        id: build-and-push-login
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          context: .
+          file: Dockerfile-login
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}/slurm-login:${{ github.event.release.tag_name || 'latest' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

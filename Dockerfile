@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Set Slurm version
-ARG SLURM_VERSION=24.05.4
+ARG SLURM_VERSION=24.11.1
 
 # Download and compile Slurm
 WORKDIR /tmp

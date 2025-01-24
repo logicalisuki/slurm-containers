@@ -1,5 +1,5 @@
 # Worker Image
-FROM ghcr.io/logicalisuki/slurm-containers/slurm-base:latest
+FROM ubiquitycluster/slurm-base:latest
 
 # Additional dependencies for the worker
 RUN apt-get update && apt-get install -y \

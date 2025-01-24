@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install -y \
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
-# Expose tcp22 for login
-EXPOSE map[22/tcp:{}]
+# Expose Port 22 for login
+EXPOSE 22
 
 # Start command
 CMD ["slurmd"]

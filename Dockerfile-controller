@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
 RUN useradd -ms /bin/bash slurm
+RUN mkdir -p /var/log/slurm
 
 # Start command
 CMD ["slurmctld", "-f", "/etc/slurm/slurm.conf"]

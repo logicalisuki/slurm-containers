@@ -14,7 +14,7 @@ RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 RUN useradd -ms /bin/bash slurm
 RUN mkdir -p /var/log/slurm
 
-EXPOSE map[6817/tcp:{}]
+EXPOSE 6817
 
 # Start command
 CMD ["sh", "-c", "munged --force && slurmctld -D -v -f /etc/slurm/slurm.conf"]

@@ -12,9 +12,7 @@ RUN apt-get update && apt-get install -y \
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
 # Expose Port 22 and 6817 for slurm for login
-EXPOSE map[22/tcp:{}]
-EXPOSE map[6817/tcp:{}]
-
+EXPOSE 22 6817
 
 # Start command
 CMD ["slurmd"]

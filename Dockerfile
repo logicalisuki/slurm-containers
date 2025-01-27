@@ -24,6 +24,16 @@ RUN apt-get update && apt-get install -y \
 # Set Slurm version
 ARG SLURM_VERSION=24.11.1
 
+# Ensure the munge group and user exist
+RUN getent group munge || groupadd -r munge && \
+    id -u munge || useradd -r -g munge munge
+
+# Create directories and set ownership
+RUN /bin/bash -c "mkdir -p /run/munge && chown munge:munge /run/munge" \
+    && /bin/bash -c "mkdir -p /var/run/munge && chown munge:munge /var/run/munge" \
+    && /bin/bash -c "mkdir -p /var/{spool,run}/{slurmd,slurmctld,slurmdbd}/" \
+    && /bin/bash -c "mkdir -p /var/log/{slurm,slurmctld,slurmdbd}/"
+
 # Download and compile Slurm
 WORKDIR /tmp
 RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
@@ -33,13 +43,6 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
     make -j$(nproc) && \
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*
-
-# Ensure Munge is set up
-#RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
-RUN /bin/bash -c mkdir -p /run/munge && chown munge:munge /run/munge && \
-    mkdir -p /var/run/munge && chown munge:munge /var/run/munge && \
-    mkdir -p /var/{spool,run}/{slurmd,slurmctld,slurmdbd}/ && \
-    mkdir -p /var/log/{slurm,slurmctld,slurmdbd}/
 
 # Add Slurm to PATH
 ENV PATH="/usr/local/slurm/bin:/usr/local/slurm/sbin:$PATH"

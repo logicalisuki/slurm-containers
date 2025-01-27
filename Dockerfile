@@ -34,6 +34,16 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*
 
+# Ensuring munge user and groups
+RUN groupadd -r munge && useradd -r -g munge munge
+
+# Ensure Munge is set up
+#RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
+RUN /bin/bash -c mkdir -p /run/munge && chown munge:munge /run/munge && \
+    mkdir -p /var/run/munge && chown munge:munge /var/run/munge && \
+    mkdir -p /var/{spool,run}/{slurmd,slurmctld,slurmdbd}/ && \
+    mkdir -p /var/log/{slurm,slurmctld,slurmdbd}/
+
 # Add Slurm to PATH
 ENV PATH="/usr/local/slurm/bin:/usr/local/slurm/sbin:$PATH"
 

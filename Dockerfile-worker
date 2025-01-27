@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y \
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
+# Expose slurm port
+EXPOSE map[6818/tcp:{}]
+
 # Start command
 CMD ["slurmd"]
 

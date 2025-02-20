@@ -1,0 +1,10 @@
+FROM ubuntu:24.04
+
+# Install only the necessary dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends adcli && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set default command
+CMD ["adcli", "--help"]

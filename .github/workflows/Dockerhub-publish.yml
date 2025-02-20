@@ -105,3 +105,14 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ env.USERNAME }}/slurm-login:${{ github.event.release.tag_name || 'latest' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Build and push AD CLI
+        id: build-and-push-adcli
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        with:
+          context: .
+          file: Dockerfile-adcli
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.USERNAME }}/slurm-adcli:${{ github.event.release.tag_name || 'latest' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -52,7 +52,6 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
 RUN getent group slurm || groupadd -r slurm && \
     id -u slurm || useradd -r -g slurm slurm
 
-RUN /bin/bash -c "mkdir -p  /usr/local/slurm/etc"
 # Install kubectl
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl

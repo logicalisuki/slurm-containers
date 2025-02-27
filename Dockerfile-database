@@ -1,15 +1,14 @@
 # Database Image with Slurm
 FROM ubiquitycluster/slurm-base:latest
 
-# Install MariaDB server and client
-RUN apt-get update && apt-get install -y \
-    mariadb-server \
-    mariadb-client && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /usr/local/slurm/etc/
+
+# Ensure Munge is set up
+RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
+
 
 # Expose ports for MariaDB and slurmdbd
 EXPOSE 3306 6819
 
 # Start MariaDB and slurmdbd
-CMD ["bash", "-c", "mysqld_safe & sleep 5 && slurmdbd"]
+CMD ["bash", "-c", "munged --force && cp /tmp/slurmdbd.conf /usr/local/slurm/etc/slurmdbd.conf && chmod 600 /usr/local/slurm/etc/slurmdbd.conf && chown slurm:slurm /usr/local/slurm/etc/slurmdbd.conf  && slurmdbd -D -v"]

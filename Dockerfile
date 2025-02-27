@@ -10,10 +10,13 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     libmunge-dev \
+    libmunge2 \
     munge \
     libssl-dev \
     libpam0g-dev \
     python-is-python3 \
+    openssl \
+    libjwt-dev \
     mariadb-client \
     mariadb-server \
     libmariadb-dev-compat \
@@ -39,10 +42,19 @@ WORKDIR /tmp
 RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
     tar -xjf slurm-${SLURM_VERSION}.tar.bz2 && \
     cd slurm-${SLURM_VERSION} && \
-    ./configure --prefix=/usr/local/slurm && \
+    ./configure --prefix=/usr/local/slurm  --with-jwt && \
     make -j$(nproc) && \
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*
+
+# Install kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin/kubectl
+
+# Add Entrypoint 
+ADD ./files/entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Add Slurm to PATH
 ENV PATH="/usr/local/slurm/bin:/usr/local/slurm/sbin:$PATH"

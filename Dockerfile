@@ -47,8 +47,10 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*
 
-# Create slurm user
-RUN useradd -ms /bin/bash slurm
+
+# Ensure the slurm group and user exist
+RUN getent group slurm || groupadd -r slurm && \
+    id -u slurm || useradd -r -g slurm slurm
 
 RUN /bin/bash -c "mkdir -p  /usr/local/slurm/etc"
 # Install kubectl

@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libpam0g-dev \
     python-is-python3 \
     openssl \
+    openssh-client \
     libjwt-dev \
     mariadb-client \
     mariadb-server \

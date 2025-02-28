@@ -48,7 +48,6 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*
 
-
 # Ensure the slurm group and user exist
 RUN getent group slurm || groupadd -r slurm && \
     id -u slurm || useradd -r -g slurm slurm
@@ -57,6 +56,9 @@ RUN getent group slurm || groupadd -r slurm && \
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
+
+# Create slurm default config folder
+RUN /bin/bash -c "mkdir -p /usr/local/slurm/etc && chown slurm:slurm /usr/local/slurm/etc"
 
 # Add Entrypoint 
 ADD ./files/entrypoint.sh /usr/local/bin/entrypoint.sh

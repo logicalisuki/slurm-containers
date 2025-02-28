@@ -9,5 +9,5 @@ RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 EXPOSE 6818
 
 # Start command
-CMD ["bash", "-c","munged --force && slurmd -D -v -f /etc/slurm/slurm.conf"]
+CMD ["bash", "-c","cp /tmp/munge.key /etc/munge/ && munged --force && slurmd -D -v -f /etc/slurm/slurm.conf"]
 

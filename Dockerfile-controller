@@ -10,4 +10,4 @@ RUN mkdir -p /var/log/slurm
 EXPOSE 6817
 
 # Start command
-CMD ["sh", "-c", "munged --force && chown slurm:slurm /var/spool/slurmctld && mkdir /var/spool/slurm && cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && slurmctld -D -v -f /etc/slurm/slurm.conf"]
+CMD ["sh", "-c", "cp /tmp/munge.key /etc/munge/ && munged --force && chown slurm:slurm /var/spool/slurmctld && mkdir /var/spool/slurm && cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && slurmctld -D -v -f /etc/slurm/slurm.conf"]

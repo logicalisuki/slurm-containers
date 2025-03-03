@@ -5,7 +5,7 @@ FROM ubiquitycluster/slurm-base:latest
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
 # RUN useradd -ms /bin/bash slurm
-RUN mkdir -p /var/log/slurm
+RUN mkdir -p /var/log/slurm && chown slurm:slurm /var/log/slurm
 
 EXPOSE 6817
 

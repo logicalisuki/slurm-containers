@@ -9,6 +9,8 @@ FROM ubuntu:24.04 AS slurm-base
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
+    libjson-c-dev \
+    libhttp-parser-dev \
     libmunge-dev \
     libmunge2 \
     munge \
@@ -43,7 +45,7 @@ WORKDIR /tmp
 RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
     tar -xjf slurm-${SLURM_VERSION}.tar.bz2 && \
     cd slurm-${SLURM_VERSION} && \
-    ./configure --prefix=/usr/local/slurm  --with-jwt && \
+    ./configure --prefix=/usr/local/slurm  --with-jwt --with-http-parser --with-json --with-curl --enable-slurmrestd && \
     make -j$(nproc) && \
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*

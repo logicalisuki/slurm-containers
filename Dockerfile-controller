@@ -5,8 +5,12 @@ FROM ubiquitycluster/slurm-base:latest
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
 # Create necessary directories and set permissions
-RUN mkdir -p /var/log/slurm /var/spool/slurmctld /var/spool/slurmrestd && \
-    chown slurm:slurm /var/log/slurm /var/spool/slurmctld /var/spool/slurmrestd
+RUN mkdir -p /var/log/slurm /var/spool/slurm /var/spool/slurmctld /var/spool/slurmrestd && \
+    chown slurm:slurm /var/log/slurm /var/spool/slurm /var/spool/slurmctld /var/spool/slurmrestd
+
+# Ensure the slurmrest group and user exist
+RUN getent group slurmrest || groupadd -r slurmrest && \
+    id -u slurmrest || useradd -r -g slurmrest slurmrest
 
 # Expose necessary ports
 EXPOSE 6817 6820
@@ -17,5 +21,5 @@ CMD ["sh", "-c", "\
     munged --force && \
     cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && \
     slurmctld -D -v -f /etc/slurm/slurm.conf & \
-    slurmrestd -f /etc/slurm/slurm.conf -a rest_auth/jwt 0.0.0.0:6820 \
+    runuser -u slurmrest -- /usr/local/slurm/sbin/slurmrestd -f /etc/slurm/slurm.conf -a rest_auth/jwt 0.0.0.0:6820 \
 "]

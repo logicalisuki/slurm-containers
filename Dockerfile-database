@@ -6,9 +6,19 @@ RUN mkdir -p /usr/local/slurm/etc/
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
-
+RUN mkdir -p /var/log/slurm /var/spool/slurm  && \
+    chown slurm:slurm /var/log/slurm /var/spool/slurm 
 # Expose ports for MariaDB and slurmdbd
 EXPOSE 3306 6819
 
-# Start MariaDB and slurmdbd
-CMD ["bash", "-c", "cp /tmp/munge.key /etc/munge/ && munged --force && cp /tmp/slurmdbd.conf /usr/local/slurm/etc/slurmdbd.conf && chmod 600 /usr/local/slurm/etc/slurmdbd.conf && chown slurm:slurm /usr/local/slurm/etc/slurmdbd.conf  && slurmdbd -D -v"]
+# Start slurmdbd
+CMD ["bash", "-c", "\
+                    cp /tmp/munge.key /etc/munge/ && \
+                    munged --force && \ 
+                    cp /etc/slurm/slurm.conf /usr/local/slurm/etc && \
+                    cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && \
+                    chown slurm:slurm /var/spool/slurm/jwt_hs256.key && \
+                    cp /tmp/slurmdbd.conf /usr/local/slurm/etc/slurmdbd.conf && \
+                    chmod 600 /usr/local/slurm/etc/slurmdbd.conf && \
+                    chown slurm:slurm /usr/local/slurm/etc/slurmdbd.conf && \
+                    slurmdbd -D -v"]

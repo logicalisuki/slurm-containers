@@ -21,5 +21,6 @@ CMD ["sh", "-c", "\
     munged --force && \
     cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && \
     slurmctld -D -v -f /etc/slurm/slurm.conf & \
+    export SLURM_JWT=daemon && \
     runuser -u slurmrest -- /usr/local/slurm/sbin/slurmrestd -f /etc/slurm/slurm.conf -a rest_auth/jwt 0.0.0.0:6820 \
 "]

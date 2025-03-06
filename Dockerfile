@@ -38,7 +38,11 @@ RUN getent group munge || groupadd -r munge && \
 RUN /bin/bash -c "mkdir -p /run/munge && chown munge:munge /run/munge" \
     && /bin/bash -c "mkdir -p /var/run/munge && chown munge:munge /var/run/munge" \
     && /bin/bash -c "mkdir -p /var/{spool,run}/{slurmd,slurmctld,slurmdbd}/" \
-    && /bin/bash -c "mkdir -p /var/log/{slurm,slurmctld,slurmdbd}/"
+    && /bin/bash -c "mkdir -p /var/log/{slurm,slurmctld,slurmdbd}/" \
+    && /bin/bash -c "chown -R munge:munge /var/log/munge" \
+    && /bin/bash -c "chmod 750 /var/log/munge" \
+    && /bin/bash -c "chown -R slurm:slurm /var/spool/slurmctld" \
+    && /bin/bash -c "chmod 755 /var/spool/slurmctld" 
 
 # Download and compile Slurm
 WORKDIR /tmp

@@ -21,4 +21,4 @@ CMD ["bash", "-c", "\
                     cp /tmp/slurmdbd.conf /usr/local/slurm/etc/slurmdbd.conf && \
                     chmod 600 /usr/local/slurm/etc/slurmdbd.conf && \
                     chown slurm:slurm /usr/local/slurm/etc/slurmdbd.conf && \
-                    slurmdbd -D -v"]
+                    sssd -d 6 --logger=files && slurmdbd -D -v"]

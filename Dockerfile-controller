@@ -18,7 +18,7 @@ EXPOSE 6817 6820
 # Start command
 CMD ["sh", "-c", "\
     cp /tmp/munge.key /etc/munge/ && \
-    munged --force && \
+    munged --force && sssd -d 6 --logger=files && \
     cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && \
     chown -R slurm:slurm /var/spool/slurmctld && \
     slurmctld -D -v -f /etc/slurm/slurm.conf & \

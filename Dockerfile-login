@@ -4,9 +4,14 @@ FROM ubiquitycluster/slurm-base:latest
 # Install SSH Server
 RUN apt-get update && apt-get install -y \
     pip \
+    pipx \
     openssh-server && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Install Easy Build
+RUN  pipx install --include-deps easybuild \
+     pipx ensurepath
 
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key

@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Install Easy Build
-RUN  pipx install --include-deps easybuild \
+RUN  pipx install --include-deps easybuild && \
      pipx ensurepath
 
 # Ensure Munge is set up

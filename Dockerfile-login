@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN rm -rf localtime && sudo ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN rm -rf /etc/localtime && sudo ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 
 # Install Easy Build
 RUN  pipx install --include-deps easybuild ensurepath

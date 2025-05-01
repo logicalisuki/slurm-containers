@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y \
     mariadb-server \
     libmariadb-dev-compat \
     libmariadb-dev && \
+    gosu && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

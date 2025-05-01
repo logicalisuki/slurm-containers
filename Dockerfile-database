@@ -6,6 +6,8 @@ RUN mkdir -p /usr/local/slurm/etc/
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
+RUN rm -rf localtime && sudo ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+
 RUN mkdir -p /var/log/slurm /var/spool/slurm  && \
     chown slurm:slurm /var/log/slurm /var/spool/slurm 
 # Expose ports for MariaDB and slurmdbd

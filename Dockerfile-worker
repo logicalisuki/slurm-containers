@@ -4,6 +4,8 @@ FROM ubiquitycluster/slurm-base:latest
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
+RUN rm -rf localtime && sudo ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+
 # Expose slurm port
 EXPOSE 6818
 

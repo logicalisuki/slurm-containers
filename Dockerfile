@@ -37,6 +37,9 @@ ARG SLURM_VERSION=24.11.1
 RUN getent group munge || groupadd -r munge && \
     id -u munge || useradd -r -g munge munge
 
+#TIME with DLS
+RUN rm -rf localtime && sudo ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+
 # Create directories and set ownership
 RUN /bin/bash -c "mkdir -p /run/munge && chown munge:munge /run/munge" \
     && /bin/bash -c "mkdir -p /var/run/munge && chown munge:munge /var/run/munge" \

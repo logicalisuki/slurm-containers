@@ -1,7 +1,7 @@
 # Controller Image
 FROM ubiquitycluster/slurm-base:latest
 
-RUN rm -rf /etc/localtime && sudo ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key

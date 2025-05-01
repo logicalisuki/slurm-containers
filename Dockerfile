@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y \
     mariadb-server \
     libmariadb-dev-compat \
     gosu \
+    tzdata \
     libmariadb-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -38,7 +39,7 @@ RUN getent group munge || groupadd -r munge && \
     id -u munge || useradd -r -g munge munge
 
 #TIME with DLS
-RUN rm -rf /etc/localtime && sudo ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 
 # Create directories and set ownership
 RUN /bin/bash -c "mkdir -p /run/munge && chown munge:munge /run/munge" \

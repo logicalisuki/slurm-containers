@@ -19,11 +19,12 @@ RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 EXPOSE 22 6817
 
 # Start command
-CMD ["bash", "-c", "cp /tmp/munge.key /etc/munge/ && \
-                    chown munge:munge /etc/munge/munge.key && \
-                    chmod 400 /etc/munge/munge.key && \
-                    munged --force && \
-                    cp /etc/slurm/slurm.conf /usr/local/slurm/etc/ && \
-                    /usr/sbin/sshd -D & \
-                    sssd -d 6 --logger=files & \
-                    sleep infinity"]
+CMD ["bash", "-c", "\
+    cp /tmp/munge.key /etc/munge/ && \
+    chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key && \
+    munged --force && \
+    cp /etc/slurm/slurm.conf /usr/local/slurm/etc && \
+    mkdir -p /run/sshd && \
+    /usr/sbin/sshd -D & \
+    sssd -d 6 --logger=files & \
+    sleep infinity"]

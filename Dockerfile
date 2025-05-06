@@ -27,6 +27,8 @@ RUN apt-get update && apt-get install -y \
     libmariadb-dev-compat \
     gosu \
     tzdata \
+    libpam-modules \
+    libpam-modules-bin \
     libmariadb-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

@@ -19,7 +19,7 @@ CMD ["bash", "-c", "\
     chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key && \
     munged --force && \
     cp /etc/slurm/slurm.conf /usr/local/slurm/etc && \
-    cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && \
+    cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key || true && \
     chown slurm:slurm /var/spool/slurm/jwt_hs256.key && \
     cp /tmp/slurmdbd.conf /usr/local/slurm/etc/slurmdbd.conf || true && \
     chmod 600 /usr/local/slurm/etc/slurmdbd.conf || true && \

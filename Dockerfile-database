@@ -21,7 +21,8 @@ CMD ["bash", "-c", "\
     cp /etc/slurm/slurm.conf /usr/local/slurm/etc && \
     cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key && \
     chown slurm:slurm /var/spool/slurm/jwt_hs256.key && \
-    cp /tmp/slurmdbd.conf /usr/local/slurm/etc/slurmdbd.conf && \
-    chmod 600 /usr/local/slurm/etc/slurmdbd.conf && chown slurm:slurm /usr/local/slurm/etc/slurmdbd.conf && \
+    cp /tmp/slurmdbd.conf /usr/local/slurm/etc/slurmdbd.conf || true && \
+    chmod 600 /usr/local/slurm/etc/slurmdbd.conf && || true && \
+    chown slurm:slurm /usr/local/slurm/etc/slurmdbd.conf && \
     sssd -d 6 --logger=files & \
     slurmdbd -D -v"]

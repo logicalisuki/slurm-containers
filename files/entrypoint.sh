@@ -86,6 +86,19 @@ then
     chown root:root /home
     chmod 755 /home
 
+    echo "---> Setting up SSH host keys (persistent on GPFS)..."
+    if [ ! -f /etc/ssh/hostkeys-persist/ssh_host_rsa_key ]; then
+        echo "---> No persistent SSH host keys found, generating them now..."
+        ssh-keygen -A
+        cp /etc/ssh/ssh_host_* /etc/ssh/hostkeys-persist/
+    else
+        echo "---> Found existing persistent SSH host keys, using them."
+    fi
+
+    echo "---> Copying persistent SSH host keys into /etc/ssh..."
+    cp /etc/ssh/hostkeys-persist/* /etc/ssh/
+    chmod 600 /etc/ssh/ssh_host_*_key
+
     echo "---> Setting up ssh for user"
 
     mkdir -p /home/rocky/.ssh
@@ -103,11 +116,6 @@ then
 
     echo "---> Complete"
     echo "---> Starting sshd"
-    cp /tempmounts/etc/ssh/* /etc/ssh/
-    chmod 600 /etc/ssh/ssh_host_dsa_key
-    chmod 600 /etc/ssh/ssh_host_ecdsa_key
-    chmod 600 /etc/ssh/ssh_host_ed25519_key
-    chmod 600 /etc/ssh/ssh_host_rsa_key
     /usr/sbin/sshd
 
     start_munge
@@ -117,8 +125,8 @@ then
     if [ -f /home/rocky/.ssh/id_rsa.pub ]; then
         echo "ssh keys already found"
     else
-            ssh-keygen -t rsa -f /home/rocky/.ssh/id_rsa -N ""
-            chown rocky:rocky /home/rocky/.ssh/id_rsa /home/rocky/.ssh/id_rsa.pub
+        ssh-keygen -t rsa -f /home/rocky/.ssh/id_rsa -N ""
+        chown rocky:rocky /home/rocky/.ssh/id_rsa /home/rocky/.ssh/id_rsa.pub
     fi
 
     ssh-keyscan localhost > /etc/ssh/ssh_known_hosts

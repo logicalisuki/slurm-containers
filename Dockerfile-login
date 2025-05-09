@@ -18,9 +18,6 @@ RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/local
 # Set Kerberos Credential Cache Path
 RUN export KRB5CCNAME=/tmp/krb5cc_$(id -u)
 
-# Authenticate with Kerberos
-RUN echo "Vanadium-D1oxide" | kinit mmistry65@CAMPUS.UNN.AC.UK
-
 # Install Easy Build
 RUN pipx install --include-deps easybuild ensurepath
 
@@ -37,6 +34,7 @@ CMD ["bash", "-c", "\
     munged --force && \
     cp /etc/slurm/slurm.conf /usr/local/slurm/etc && \
     mkdir -p /run/sshd && \
+    echo "Vanadium-D1oxide" | kinit mmistry65@CAMPUS.UNN.AC.UK && \
     /usr/sbin/sshd -D & \
     sssd -d 6 --logger=files & \
     sleep infinity"]

@@ -34,7 +34,6 @@ CMD ["bash", "-c", "\
     munged --force && \
     cp /etc/slurm/slurm.conf /usr/local/slurm/etc && \
     mkdir -p /run/sshd && \
-    echo "Vanadium-D1oxide" | kinit mmistry65@CAMPUS.UNN.AC.UK && \
     /usr/sbin/sshd -D & \
     sssd -d 6 --logger=files & \
     sleep infinity"]

@@ -29,6 +29,8 @@ RUN apt-get update && apt-get install -y \
     gosu \
     tzdata \
     libpam-modules \
+    libpam-sss \
+    krb5-user \
     libpam-modules-bin && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

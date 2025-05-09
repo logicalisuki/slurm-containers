@@ -29,8 +29,6 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     libpam-modules \
     libpam-modules-bin \
-    libpam-modules \
-    libpam-modules-bin \
     libmariadb-dev \
     libpam-pwquality \
     libpam-cap \

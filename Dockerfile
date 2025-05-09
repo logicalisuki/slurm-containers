@@ -29,6 +29,47 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     libpam-modules \
     libpam-modules-bin \
+    libpam-modules \
+    libpam-modules-bin \
+    libmariadb-dev \
+    libpam-pwquality \
+    libpam-cap \
+    libpam-faildelay \
+    libpam-sss \
+    libpam-debug \
+    libpam-ssh \
+    libpam-unix \
+    libpam-rootok \
+    libpam-nologin \
+    libpam-systemd \
+    libpam-mail \
+    libpam-filter \
+    libpam-umask \
+    libpam-limits \
+    libpam-time \
+    libpam-keyinit \
+    libpam-access \
+    libpam-permit \
+    libpam-loginuid \
+    libpam-group \
+    libpam-localuser \
+    libpam-succeed-if \
+    libpam-warn \
+    libpam-ssh \
+    libpam-shells \
+    libpam-echo \
+    libpam-deny \
+    libpam-timestamp \
+    libpam-setquota \
+    libpam-systemd-loadkey \
+    libpam-selinux \
+    libpam-group \
+    libpam-cap \
+    libpam-ftp \
+    libpam-gdm \
+    libpam-gnome-keyring \
+    libpam-sssd \
+    libpam-fprintd \
     libmariadb-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

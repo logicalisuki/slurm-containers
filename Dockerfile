@@ -6,6 +6,7 @@
 FROM ubuntu:24.04 AS slurm-base
 
 # Install dependencies for building Slurm
+# Install dependencies for building Slurm and required PAM modules
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
@@ -29,22 +30,16 @@ RUN apt-get update && apt-get install -y \
     tzdata \
     libpam-modules \
     libpam-modules-bin \
-    libmariadb-dev \
     libpam-pwquality \
     libpam-cap \
-    libpam-faildelay \
     libpam-sss \
-    libpam-debug \
     libpam-ssh \
     libpam-unix \
-    libpam-rootok \
     libpam-nologin \
     libpam-systemd \
     libpam-mail \
-    libpam-filter \
     libpam-umask \
     libpam-limits \
-    libpam-time \
     libpam-keyinit \
     libpam-access \
     libpam-permit \
@@ -53,22 +48,13 @@ RUN apt-get update && apt-get install -y \
     libpam-localuser \
     libpam-succeed-if \
     libpam-warn \
-    libpam-ssh \
     libpam-shells \
     libpam-echo \
     libpam-deny \
     libpam-timestamp \
     libpam-setquota \
-    libpam-systemd-loadkey \
-    libpam-selinux \
-    libpam-group \
-    libpam-cap \
-    libpam-ftp \
-    libpam-gdm \
-    libpam-gnome-keyring \
-    libpam-sssd \
-    libpam-fprintd \
-    libmariadb-dev && \
+    libpam-systemd \
+    libpam-sssd && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

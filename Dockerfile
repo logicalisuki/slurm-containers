@@ -29,32 +29,7 @@ RUN apt-get update && apt-get install -y \
     gosu \
     tzdata \
     libpam-modules \
-    libpam-modules-bin \
-    libpam-pwquality \
-    libpam-cap \
-    libpam-sss \
-    libpam-ssh \
-    libpam-unix \
-    libpam-nologin \
-    libpam-systemd \
-    libpam-mail \
-    libpam-umask \
-    libpam-limits \
-    libpam-keyinit \
-    libpam-access \
-    libpam-permit \
-    libpam-loginuid \
-    libpam-group \
-    libpam-localuser \
-    libpam-succeed-if \
-    libpam-warn \
-    libpam-shells \
-    libpam-echo \
-    libpam-deny \
-    libpam-timestamp \
-    libpam-setquota \
-    libpam-systemd \
-    libpam-sssd && \
+    libpam-modules-bin && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

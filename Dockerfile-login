@@ -4,9 +4,7 @@ FROM ubiquitycluster/slurm-base:latest
 # Install SSH Server and Kerberos Client
 RUN apt-get update && apt-get install -y \
     python3 \
-    lmod \
     pip3 \
-    pipx \
     libpam-modules \
     libpam-modules-bin \
     openssh-server \

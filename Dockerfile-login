@@ -3,7 +3,7 @@ FROM ubiquitycluster/slurm-base:latest
 
 # Install SSH Server and Kerberos Client
 RUN apt-get update && apt-get install -y \
-    python3 \
+    python-pip \
     pip3 \
     libpam-modules \
     libpam-modules-bin \

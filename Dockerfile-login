@@ -3,7 +3,9 @@ FROM ubiquitycluster/slurm-base:latest
 
 # Install SSH Server and Kerberos Client
 RUN apt-get update && apt-get install -y \
-    pip \
+    python3 \
+    lmod \
+    pip3 \
     pipx \
     libpam-modules \
     libpam-modules-bin \
@@ -19,7 +21,7 @@ RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/local
 RUN export KRB5CCNAME=/tmp/krb5cc_$(id -u)
 
 # Install Easy Build
-RUN pipx install --include-deps easybuild ensurepath
+RUN pip3 install --include-deps easybuild ensurepath
 
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key

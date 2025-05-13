@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
         libpam-modules-bin \
         openssh-server \
         krb5-user \
+	lua5.3 \
+	lmod \
         && apt-get clean && \
         rm -rf /var/lib/apt/lists/*
 
@@ -32,6 +34,9 @@ EXPOSE 6818
 
 # Add virtual environment to PATH
 ENV PATH="/opt/venv/bin:/usr/local/slurm/bin:$PATH"
+
+# Source Lmod initialization script and add to PATH
+RUN echo "source /usr/share/lmod/lmod/init/bash" >> ~/.bashrc
 
 # Start command
 CMD ["bash", "-c", "cp /tmp/munge.key /etc/munge/ && \

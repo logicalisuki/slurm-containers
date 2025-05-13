@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # Base image for Slurm Compilation
+  slurm-base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: slurm-base:latest
+    container_name: slurm-base-container
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]  # Assuming entrypoint.sh is the main entrypoint for the base image
+    networks:
+      - slurm_network
+
+  # adcli service
+  adcli:
+    build:
+      context: .
+      dockerfile: Dockerfile-adcli
+    image: adcli:latest
+    container_name: adcli-container
+    depends_on:
+      - slurm-base
+    networks:
+      - slurm_network
+    entrypoint: ["adcli", "--help"]
+
+  # Controller service
+  controller:
+    build:
+      context: .
+      dockerfile: Dockerfile-controller
+    image: controller:latest
+    container_name: controller-container
+    depends_on:
+      - slurm-base
+    networks:
+      - slurm_network
+
+  # Database service
+  database:
+    build:
+      context: .
+      dockerfile: Dockerfile-database
+    image: database:latest
+    container_name: database-container
+    depends_on:
+      - slurm-base
+    networks:
+      - slurm_network
+
+  # Login service
+  login:
+    build:
+      context: .
+      dockerfile: Dockerfile-login
+    image: login:latest
+    container_name: login-container
+    depends_on:
+      - slurm-base
+    networks:
+      - slurm_network
+
+  # Worker service
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile-worker
+    image: worker:latest
+    container_name: worker-container
+    depends_on:
+      - slurm-base
+    networks:
+      - slurm_network
+
+networks:
+  slurm_network:
+    driver: bridge

@@ -1,15 +1,25 @@
 # Login Image
 FROM ubiquitycluster/slurm-base:latest
 
-# Install SSH Server and Kerberos Client
+# Install SSH Server, Python3-pip, Python3-venv, pipx, and Kerberos Client
 RUN apt-get update && apt-get install -y \
-    python3-pip \
-    libpam-modules \
-    libpam-modules-bin \
-    openssh-server \
-    krb5-user \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+        python3-pip \
+        python3-venv \
+        libpam-modules \
+        libpam-modules-bin \
+        openssh-server \
+        krb5-user \
+        && apt-get clean && \
+        rm -rf /var/lib/apt/lists/*
+
+# Create a Virtual Environment for Python packages
+RUN python3 -m venv /opt/venv
+
+# Upgrade pip inside the virtual environment and install pipx
+RUN /opt/venv/bin/pip install --upgrade pip
+
+# Install EasyBuild using pipx inside the virtual environment
+RUN /opt/venv/bin/pip install EasyBuild
 
 # Set Timezone
 RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
@@ -17,14 +27,14 @@ RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/local
 # Set Kerberos Credential Cache Path
 RUN export KRB5CCNAME=/tmp/krb5cc_$(id -u)
 
-# Install Easy Build
-RUN pip3 install --include-deps easybuild ensurepath
-
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
 # Expose Port 22 and 6817 for slurm for login
 EXPOSE 22 88 389 636 3268 6817
+
+# Add virtual environment to PATH
+ENV PATH="/opt/venv/bin:/usr/local/slurm/bin:$PATH"
 
 # Start command
 CMD ["bash", "-c", "\
@@ -36,3 +46,4 @@ CMD ["bash", "-c", "\
     /usr/sbin/sshd -D & \
     sssd -d 6 --logger=files & \
     sleep infinity"]
+

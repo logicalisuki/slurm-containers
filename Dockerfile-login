@@ -26,6 +26,9 @@ RUN /opt/venv/bin/pip install EasyBuild
 # Set Timezone
 RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 
+# copying skel files for logins
+COPY files/skel/ /etc/skel/
+
 # Set Kerberos Credential Cache Path
 RUN export KRB5CCNAME=/tmp/krb5cc_$(id -u)
 

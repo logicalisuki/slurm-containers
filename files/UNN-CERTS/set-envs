@@ -1,0 +1,12 @@
+# Can be added to /etc/bash.bashrc or /etc/profile for all users
+# Used by Python requests module for SSL verification
+echo "export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt" >> ~/.bashrc
+# Used by OpenSSL based applications including Python ssl module
+echo "export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" >> ~/.bashrc
+# Used by cURL and other networky things
+echo "export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt" >> ~/.bashrc
+
+#Forcing Git to Use System Certificates
+git config --global http.sslCAInfo "/usr/local/share/ca-certificates/NP-PKI-ROOTCA-CA-1.crt" 
+#Remove with
+#git config --global --unset http.sslCAInfo

@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     libhttp-parser-dev \
     libmunge-dev \
     libmunge2 \
+    libjansson-dev \
     munge \
     libssl-dev \
     libpam0g-dev \

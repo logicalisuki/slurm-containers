@@ -82,7 +82,7 @@ then
 
 elif [ "$1" = "login" ]
 then
-
+    
     chown root:root /home
     chmod 755 /home
 

@@ -27,3 +27,8 @@ alias la='ls -A'
 alias l='ls -CF'
 alias squeue='squeue -u $USER'
 alias sinfo='sinfo -o "%P %.8D %.6t %.6m %.8z %.10l %.6a %20N"'
+
+#cert directories
+REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt

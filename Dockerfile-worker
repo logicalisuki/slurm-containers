@@ -19,11 +19,11 @@ RUN apt-get update && apt-get install -y \
         nano \
         vim-tiny \
         mc \
+        lua5.3 \
+        lmod \
         tmux && \
         locale-gen en_GB.UTF-8 && \
         update-locale LANG=en_GB.UTF-8
-	lua5.3 \
-	lmod \
         && apt-get clean && \
         rm -rf /var/lib/apt/lists/*
 

@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     tzdata \
     libpam-modules \
     libpam-sss \
+    ca-certificates \
     krb5-user \
     libpam-modules-bin && \
     yes | unminimize && \

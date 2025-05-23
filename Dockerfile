@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     libpam-sss \
     krb5-user \
     libpam-modules-bin && \
-    yes | unminimize \
+    yes | unminimize && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

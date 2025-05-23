@@ -24,7 +24,7 @@ RUN /opt/venv/bin/pip install --upgrade pip
 RUN /opt/venv/bin/pip install EasyBuild
 
 # Adding certs for UNN
-COPY files/UNN-CERTS/NP-PKI-ROOTCA-CA-1.crt /usr/local/share/ca-certificates/
+COPY ./files/UNN-CERTS/NP-PKI-ROOTCA-CA-1.crt /usr/local/share/ca-certificates/
 RUN update-ca-certificates
 
 # Set Timezone

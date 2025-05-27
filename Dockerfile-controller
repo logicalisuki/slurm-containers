@@ -18,6 +18,7 @@ CMD ["sh", "-c", "\
     mkdir -p /var/spool/slurm && \
     chown -R slurm:slurm /var/spool/slurm && \ 
     touch /var/spool/slurm/jwt_hs256.key && \
+    chmod 600 /var/spool/slurm/jwt_hs256.key && \
     chown -R slurm:slurm /var/spool/slurmctld && \
     export SLURM_CONF=/etc/slurm/slurm.conf && \
     export SLURM_JWT=daemon && \

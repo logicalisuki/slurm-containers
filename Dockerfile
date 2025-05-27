@@ -39,11 +39,6 @@ ARG SLURM_VERSION=24.11.1
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 
-# Prepare directory structure
-RUN mkdir -p /run/munge /var/run/munge /var/spool/{slurmd,slurmctld,slurmdbd} /var/log/{slurm,slurmctld,slurmdbd} && \
-    chown -R munge:munge /run/munge /var/run/munge && \
-    chown -R slurm:slurm /var/spool /var/log
-
 # Build and install Slurm
 WORKDIR /tmp
 RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \

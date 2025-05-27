@@ -53,11 +53,7 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
     rm -rf /tmp/slurm-${SLURM_VERSION}*
 
 # Create config directory
-RUN mkdir -p /usr/local/slurm/etc && chown slurm:slurm /usr/local/slurm/etc
-
-# Install kubectl (optional)
-RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl" && \
-    chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+RUN mkdir -p /usr/local/slurm/etc
 
 # Add entrypoint
 COPY ./files/entrypoint.sh /usr/local/bin/entrypoint.sh

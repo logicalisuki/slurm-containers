@@ -15,7 +15,6 @@ CMD ["sh", "-c", "\
     cp /tmp/munge.key /etc/munge/ && \
     chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key && \
     munged --force && \
-    cp /secrets/slurm/jwt_hs256.key /var/spool/slurm/jwt_hs256.key || true && \
     chown -R slurm:slurm /var/spool/slurmctld && \
     export SLURM_CONF=/etc/slurm/slurm.conf && \
     export SLURM_JWT=daemon && \

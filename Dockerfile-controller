@@ -6,9 +6,6 @@ RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/local
 # Ensure Munge is set up
 RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 
-# Create necessary directories and set permissions
-RUN mkdir -p /var/log/slurm /var/spool/slurm /var/spool/slurmctld /var/spool/slurmrestd && \
-
 # Expose necessary ports
 EXPOSE 6817 6820
 

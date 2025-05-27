@@ -28,6 +28,6 @@ CMD ["sh", "-c", "\
     export SLURM_JWT=daemon && \
     slurmctld -D -v -f $SLURM_CONF & \
     env SLURM_CONF=$SLURM_CONF SLURM_JWT=$SLURM_JWT runuser -u slurmrest -- \
-      /usr/local/slurm/sbin/slurmrestd -f $SLURM_CONF -a rest_auth/jwt 0.0.0.0:6820 \
+      /usr/local/slurm/sbin/slurmrestd -f $SLURM_CONF --auth=rest_auth/jwt 0.0.0.0:6820 \
 "]
 

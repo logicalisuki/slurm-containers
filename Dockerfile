@@ -36,10 +36,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set Slurm version
 ARG SLURM_VERSION=24.11.1
 
-# Create Slurm and Munge users
-RUN groupadd -r munge && useradd -r -g munge munge && \
-    groupadd -r slurm && useradd -r -g slurm slurm
-
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 

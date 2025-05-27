@@ -51,6 +51,12 @@ then
     echo "---> Setting permissions for state directory ..."
     chown slurm:slurm /var/spool/slurmctld
 
+    
+    echo "---> Copying JWT key from mounted secret ..."
+    cp /etc/secrets/jwt_hs256.key /var/spool/slurm/jwt_hs256.key
+    chown slurm:slurm /var/spool/slurm/jwt_hs256.key
+    chmod 600 /var/spool/slurm/jwt_hs256.key
+
     echo "---> Starting the Slurm Controller Daemon (slurmctld) ..."
     if /usr/sbin/slurmctld -V | grep -q '17.02' ; then
         exec gosu slurm /usr/sbin/slurmctld -D "${@:2}"

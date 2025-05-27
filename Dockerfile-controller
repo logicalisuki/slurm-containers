@@ -20,6 +20,4 @@ CMD ["sh", "-c", "\
     export SLURM_JWT=daemon && \
     slurmctld -D -v -f $SLURM_CONF & \
     sleep 5 && \
-    runuser -u slurmrest -- \
-      /usr/local/slurm/sbin/slurmrestd -f /etc/slurm/slurm.conf --auth=rest_auth/jwt 0.0.0.0:6820 \
 "]

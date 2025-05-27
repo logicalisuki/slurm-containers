@@ -18,6 +18,6 @@ CMD ["sh", "-c", "\
     chown -R slurm:slurm /var/spool/slurmctld && \
     export SLURM_CONF=/etc/slurm/slurm.conf && \
     export SLURM_JWT=daemon && \
-    slurmctld -D -v -f $SLURM_CONF & \
-    sleep 5 && \
+    slurmctld -D -v -f $SLURM_CONF && \
+    sleep 5 
 "]

@@ -58,7 +58,7 @@ WORKDIR /tmp
 RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 && \
     tar -xjf slurm-${SLURM_VERSION}.tar.bz2 && \
     cd slurm-${SLURM_VERSION} && \
-    ./configure --prefix=/usr/local/slurm  --with-jwt --with-http-parser --with-curl --enable-slurmrestd > /tmp/configure.log 2>&1 || (cat /tmp/configure.log && false) && \
+    ./configure --prefix=/usr/local/slurm  --with-jwt --with-http-parser --with-curl --with-mysql --enable-slurmrestd > /tmp/configure.log 2>&1 || (cat /tmp/configure.log && false) && \
     make -j$(nproc) && \
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*

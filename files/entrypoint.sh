@@ -59,12 +59,13 @@ then
     cp /etc/secrets/jwt_hs256.key /var/spool/slurm/jwt_hs256.key
     chown slurm:slurm /var/spool/slurm/jwt_hs256.key
     chmod 600 /var/spool/slurm/jwt_hs256.key
+    SLURMCTLD=$(which slurmctld)
 
     echo "---> Starting the Slurm Controller Daemon (slurmctld) ..."
-    if /usr/sbin/slurmctld -V | grep -q '17.02' ; then
-        exec gosu slurm /usr/sbin/slurmctld -D "${@:2}"
+    if /usr/local/slurm/sbin/slurmctld -V | grep -q '17.02' ; then
+        exec gosu slurm /usr/local/slurm/sbin/slurmctld -D "${@:2}"
     else
-        exec gosu slurm /usr/sbin/slurmctld -i -D "${@:2}"
+        exec gosu slurm /usr/local/slurm/sbin/slurmctld -i -D "${@:2}"
     fi
 
 elif [ "$CMD" = "slurmd" ]

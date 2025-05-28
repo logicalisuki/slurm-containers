@@ -9,16 +9,9 @@ RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 # Expose necessary ports
 EXPOSE 6817 6820
 
-# Start command
-CMD ["sh", "-c", "\
-    mkdir -p /etc/munge && \
-    cp /tmp/munge.key /etc/munge/ && \
-    chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key && \
-    munged --force && \
-    mkdir -p /var/spool/slurm && \
-    chown -R slurm:slurm /var/spool/slurm && \ 
-    chown -R slurm:slurm /var/spool/slurmctld && \
-    export SLURM_CONF=/etc/slurm/slurm.conf && \
-    export SLURM_JWT=daemon && \
-    slurmctld -D -v -f $SLURM_CONF \
-"]
+# Copying entry point and enabling execution
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# using entry point to start all slurm stuff
+CMD ["/entrypoint.sh"]

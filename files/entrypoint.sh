@@ -55,6 +55,7 @@ then
 
     
     echo "---> Copying JWT key from mounted secret ..."
+    mkdir -p /var/spool/slurm
     cp /etc/secrets/jwt_hs256.key /var/spool/slurm/jwt_hs256.key
     chown slurm:slurm /var/spool/slurm/jwt_hs256.key
     chmod 600 /var/spool/slurm/jwt_hs256.key

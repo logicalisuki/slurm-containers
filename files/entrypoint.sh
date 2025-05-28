@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+CMD="${1:-}"
+
 function start_munge(){
 
     echo "---> Copying MUNGE key ..."
@@ -11,7 +13,7 @@ function start_munge(){
     gosu munge /usr/sbin/munged "$@"
 }
 
-if [ "$1" = "slurmdbd" ]
+if [ "$CMD" = "slurmdbd" ]
 then
 
     start_munge
@@ -34,7 +36,7 @@ then
 
     exec gosu slurm /usr/sbin/slurmdbd -D "${@:2}"
 
-elif [ "$1" = "slurmctld" ]
+elif [ "$CMD" = "slurmctld" ]
 then
 
     start_munge
@@ -64,7 +66,7 @@ then
         exec gosu slurm /usr/sbin/slurmctld -i -D "${@:2}"
     fi
 
-elif [ "$1" = "slurmd" ]
+elif [ "$CMD" = "slurmd" ]
 then
     echo "---> Set shell resource limits ..."
     ulimit -l unlimited
@@ -86,7 +88,7 @@ then
     echo "---> Starting the Slurm Node Daemon (slurmd) ..."
     exec /usr/sbin/slurmd -D "${@:2}"
 
-elif [ "$1" = "login" ]
+elif [ "$CMD" = "login" ]
 then
     
     chown root:root /home
@@ -139,7 +141,7 @@ then
     echo "" >> /home/rocky/.ssh/authorized_keys #Adding newline to avoid breaking authorized_keys file
     cat /home/rocky/.ssh/id_rsa.pub >> /home/rocky/.ssh/authorized_keys
 
-elif [ "$1" = "check-queue-hook" ]
+elif [ "$CMD" = "check-queue-hook" ]
 then
     start_munge
 
@@ -154,13 +156,13 @@ then
         exit 1
     fi
 
-elif [ "$1" = "undrain-nodes-hook" ]
+elif [ "$CMD" = "undrain-nodes-hook" ]
 then
     start_munge
     scontrol update NodeName=all State=UNDRAIN
     exit 0
 
-elif [ "$1" = "generate-keys-hook" ]
+elif [ "$CMD" = "generate-keys-hook" ]
 then
     mkdir -p ./temphostkeys/etc/ssh
     ssh-keygen -A -f ./temphostkeys
@@ -172,7 +174,7 @@ then
 
     exit 0
 
-elif [ "$1" = "debug" ]
+elif [ "$CMD" = "debug" ]
 then
     start_munge --foreground
 

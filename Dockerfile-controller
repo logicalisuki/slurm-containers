@@ -13,8 +13,10 @@ EXPOSE 6817 6820
 COPY ./files/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Setting entrypoint
+# Setting slurm config variable
+ENV SLURM_CONF=/etc/slurm/slurm.conf
 
+# Setting entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 
 # using entry point to start all slurm stuff

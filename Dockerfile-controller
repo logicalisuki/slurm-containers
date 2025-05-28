@@ -11,7 +11,7 @@ EXPOSE 6817 6820
 
 # Copying entry point and enabling execution
 COPY ./files/entrypoint.sh /entrypoint.sh
-RUN chmod +x ./files/entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # using entry point to start all slurm stuff
 CMD ["/entrypoint.sh"]

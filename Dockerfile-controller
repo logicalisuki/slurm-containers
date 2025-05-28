@@ -10,7 +10,7 @@ RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
 EXPOSE 6817 6820
 
 # Copying entry point and enabling execution
-COPY entrypoint.sh ./files/entrypoint.sh
+COPY ./files/entrypoint.sh /entrypoint.sh
 RUN chmod +x ./files/entrypoint.sh
 
 # using entry point to start all slurm stuff

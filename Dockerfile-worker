@@ -17,6 +17,9 @@ RUN apt-get update && \
 # Install SSH Server, Python3-pip, Python3-venv, and pipx
 RUN apt-get update && apt-get install -y \
         libnss-wrapper \
+        munge \ 
+        libmunge2 \
+        libmunge-dev \
         python3-pip \
         python3-venv \
         libpam-modules \

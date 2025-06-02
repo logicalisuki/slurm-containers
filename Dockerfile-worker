@@ -5,6 +5,8 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN sed -i 's|http://archive.ubuntu.com|https://archive.ubuntu.com|g' /etc/apt/sources.list
+
 # Enable all Ubuntu repos
 RUN apt-get update && \
     apt-get install -y software-properties-common && \

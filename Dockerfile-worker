@@ -1,6 +1,13 @@
 # Worker Image
 FROM ubiquitycluster/slurm-base:latest
 
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Use HTTPS to avoid mirror blocks
+RUN sed -i 's|http://archive.ubuntu.com|https://archive.ubuntu.com|g' /etc/apt/sources.list
+
 # Install SSH Server, Python3-pip, Python3-venv, and pipx
 RUN apt-get update && apt-get install -y \
         libnss-wrapper \

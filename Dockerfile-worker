@@ -3,7 +3,7 @@ FROM ubiquitycluster/slurm-base:latest
 
 # Install SSH Server, Python3-pip, Python3-venv, and pipx
 RUN apt-get update && apt-get install -y \
-        libnss-wrapper \
+        nss-wrapper \
         python3-pip \
         python3-venv \
         libpam-modules \

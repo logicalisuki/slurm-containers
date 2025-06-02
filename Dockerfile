@@ -7,7 +7,7 @@ FROM ubuntu:24.04 AS slurm-base
 # Install dependencies for building Slurm
 # Install dependencies for building Slurm and required PAM modules
 RUN apt-get update && apt-get install -y  --no-install-recommends\
-    libnss-wrapper \
+    nss-wrapper \
     build-essential \
     curl \
     libjson-c-dev \

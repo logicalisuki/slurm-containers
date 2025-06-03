@@ -73,7 +73,8 @@ then
 
 elif [ "$CMD" = "slurmd" ]
 then
-    set -euo pipefail
+    
+    start_munge	
 
     echo "---> Setting shell resource limits ..."
     ulimit -l unlimited
@@ -99,10 +100,6 @@ then
     gosu munge /usr/sbin/munged --force
     sleep 2  # give munged a moment to start
 
-# Start SSSD in the background if needed
-    echo "---> Starting SSSD ..."
-    sssd -d 6 --logger=files || echo "SSSD failed to start, continuing anyway"
-
 # Setup NSS wrapper
     export LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
     export NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
@@ -123,6 +120,7 @@ then
 # Run slurmd in foreground
     echo "---> Launching slurmd ..."
     exec gosu slurm /usr/sbin/slurmd -D -v -f /etc/slurm/slurm.conf
+    sleep 4
 
 elif [ "$CMD" = "login" ]
 then

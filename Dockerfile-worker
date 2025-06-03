@@ -55,8 +55,6 @@ ENV LC_ALL en_GB.UTF-8
 # Making sure that slurm user exists
 # Add Slurm user and group
 # Add slurm user if it doesn't exist
-RUN getent group slurm || groupadd -r slurm && \
-    id -u slurm || useradd -r -g slurm -s /sbin/nologin -d /var/lib/slurm slurm
 
 RUN getent passwd slurm || echo "slurm user not found"
 RUN getent group slurm || echo "slurm group not found"
@@ -81,6 +79,9 @@ ENV PATH="/opt/venv/bin:/usr/local/slurm/bin:$PATH"
 
 # Source Lmod initialization script and add to PATH
 RUN echo "source /usr/share/lmod/lmod/init/bash" >> ~/.bashrc
+
+# Setting slurm config variable
+ENV SLURM_CONF=/etc/slurm/slurm.conf
 
 COPY files/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

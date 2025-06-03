@@ -104,6 +104,7 @@ then
     export LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
     export NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
     export NSS_WRAPPER_GROUP=/mnt/identity-store/global.group
+    export SLURM_CONF=/etc/slurm/slurm.conf
 
 # Validate NSS files
     if [[ ! -f "$NSS_WRAPPER_PASSWD" || ! -f "$NSS_WRAPPER_GROUP" ]]; then

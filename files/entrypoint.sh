@@ -91,6 +91,9 @@ then
       exit 1
     fi
 
+    echo "---> Preparing slurmd state directories ..."
+    mkdir -p /var/run/slurmd /var/spool/slurmd /var/log/slurm
+    chown -R slurm:slurm /var/run/slurmd /var/spool/slurmd /var/log/slurm
 # Start MUNGE
     echo "---> Starting munged ..."
     gosu munge /usr/sbin/munged --force
@@ -119,7 +122,7 @@ then
 
 # Run slurmd in foreground
     echo "---> Launching slurmd ..."
-    exec /usr/sbin/slurmd -D -v -f /etc/slurm/slurm.conf
+    exec gosu slurm /usr/sbin/slurmd -D -v -f /etc/slurm/slurm.conf
 
 elif [ "$CMD" = "login" ]
 then

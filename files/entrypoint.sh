@@ -132,8 +132,7 @@ then
 
 # Run slurmd in foreground
     echo "---> Launching slurmd ..."
-    exec gosu slurm /usr/local/slurm/sbin/slurmd -D -v -f /etc/slurm/slurm.conf
-    sleep 4
+    exec /usr/local/slurm/sbin/slurmd -D -v -f /etc/slurm/slurm.conf
 
 elif [ "$CMD" = "login" ]
 then

@@ -54,7 +54,12 @@ ENV LC_ALL en_GB.UTF-8
 
 # Making sure that slurm user exists
 # Add Slurm user and group
-RUN groupadd -r slurm && useradd -r -g slurm slurm
+# Add slurm user if it doesn't exist
+RUN getent group slurm || groupadd -r slurm && \
+    id -u slurm || useradd -r -g slurm -s /sbin/nologin -d /var/lib/slurm slurm
+
+RUN getent passwd slurm || echo "slurm user not found"
+RUN getent group slurm || echo "slurm group not found"
 
 # Create a Virtual Environment for Python packages
 RUN python3 -m venv /opt/venv

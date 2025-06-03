@@ -77,3 +77,5 @@ RUN echo "source /usr/share/lmod/lmod/init/bash" >> ~/.bashrc
 COPY files/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["slurmd"]

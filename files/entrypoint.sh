@@ -73,25 +73,37 @@ then
 
 elif [ "$CMD" = "slurmd" ]
 then
-    echo "---> Set shell resource limits ..."
+    set -euo pipefail
+
+    echo "---> Setting shell resource limits ..."
     ulimit -l unlimited
     ulimit -s unlimited
     ulimit -n 131072
     ulimit -a
+    echo "---> Copying MUNGE key ..."
+    cp /tmp/munge.key /etc/munge/munge.key
+    chown munge:munge /etc/munge/munge.key
+    chmod 400 /etc/munge/munge.key
 
-    start_munge
+    echo "---> Starting MUNGE authentication service ..."
+    gosu munge /usr/sbin/munged --force
 
-    echo "---> Waiting for slurmctld to become active before starting slurmd..."
+    echo "---> Starting SSSD (in background)..."
+    sssd -d 6 --logger=files &
 
-    until 2>/dev/null >/dev/tcp/slurmctld-0/6817
-    do
-        echo "-- slurmctld is not available.  Sleeping ..."
+    echo "---> Configuring NSS wrapper for dynamic user injection ..."
+    export LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
+    export NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
+    export NSS_WRAPPER_GROUP=/mnt/identity-store/global.group
+
+    echo "---> Waiting for slurmctld to become available ..."
+    until 2>/dev/null >/dev/tcp/slurmctld-0/6817; do
+        echo "-- slurmctld not reachable, sleeping..."
         sleep 2
-    done
-    echo "-- slurmctld is now active ..."
+done
 
-    echo "---> Starting the Slurm Node Daemon (slurmd) ..."
-    exec /usr/sbin/slurmd -D "${@:2}"
+    echo "---> Launching slurmd ..."
+    exec /usr/sbin/slurmd -D -v -f /etc/slurm/slurm.conf
 
 elif [ "$CMD" = "login" ]
 then

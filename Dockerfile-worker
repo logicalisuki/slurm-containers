@@ -67,9 +67,6 @@ RUN /opt/venv/bin/pip install --upgrade pip
 # Install EasyBuild using pipx inside the virtual environment
 RUN /opt/venv/bin/pip install EasyBuild
 
-# Ensure Munge is set up
-RUN chown munge:munge /etc/munge/munge.key && chmod 400 /etc/munge/munge.key
-
 # Set Timezone
 RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 
@@ -82,10 +79,6 @@ ENV PATH="/opt/venv/bin:/usr/local/slurm/bin:$PATH"
 # Source Lmod initialization script and add to PATH
 RUN echo "source /usr/share/lmod/lmod/init/bash" >> ~/.bashrc
 
-# Start command
-CMD ["bash", "-c", "cp /tmp/munge.key /etc/munge/ && \
-                    chown munge:munge /etc/munge/munge.key && \
-                    chmod 400 /etc/munge/munge.key && \
-                    munged --force && \
-                    sssd -d 6 --logger=files & \
-                    slurmd -D -v -f /etc/slurm/slurm.conf"]
+COPY files/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

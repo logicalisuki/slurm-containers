@@ -79,29 +79,45 @@ then
     ulimit -l unlimited
     ulimit -s unlimited
     ulimit -n 131072
-    ulimit -a
-    echo "---> Copying MUNGE key ..."
-    cp /tmp/munge.key /etc/munge/munge.key
-    chown munge:munge /etc/munge/munge.key
-    chmod 400 /etc/munge/munge.key
 
-    echo "---> Starting MUNGE authentication service ..."
+    # Setup MUNGE key
+    if [[ -f /tmp/munge.key ]]; then
+      echo "---> Copying MUNGE key ..."
+      cp /tmp/munge.key /etc/munge/munge.key
+      chown munge:munge /etc/munge/munge.key
+      chmod 400 /etc/munge/munge.key
+    else
+      echo "ERROR: /tmp/munge.key not found. Exiting."
+      exit 1
+    fi
+
+# Start MUNGE
+    echo "---> Starting munged ..."
     gosu munge /usr/sbin/munged --force
+    sleep 2  # give munged a moment to start
 
-    echo "---> Starting SSSD (in background)..."
-    sssd -d 6 --logger=files &
+# Start SSSD in the background if needed
+    echo "---> Starting SSSD ..."
+    sssd -d 6 --logger=files || echo "SSSD failed to start, continuing anyway"
 
-    echo "---> Configuring NSS wrapper for dynamic user injection ..."
+# Setup NSS wrapper
     export LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
     export NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
     export NSS_WRAPPER_GROUP=/mnt/identity-store/global.group
 
-    echo "---> Waiting for slurmctld to become available ..."
-    until 2>/dev/null >/dev/tcp/slurmctld-0/6817; do
+# Validate NSS files
+    if [[ ! -f "$NSS_WRAPPER_PASSWD" || ! -f "$NSS_WRAPPER_GROUP" ]]; then
+      echo "WARNING: NSS wrapper files not found, user resolution may fail"
+    fi
+
+# Wait for slurmctld
+    echo "---> Waiting for slurmctld to become available..."
+    until timeout 1 bash -c "</dev/tcp/slurmctld-0/6817" 2>/dev/null; do
         echo "-- slurmctld not reachable, sleeping..."
         sleep 2
-done
+    done
 
+# Run slurmd in foreground
     echo "---> Launching slurmd ..."
     exec /usr/sbin/slurmd -D -v -f /etc/slurm/slurm.conf
 

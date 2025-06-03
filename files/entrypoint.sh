@@ -99,17 +99,29 @@ then
     echo "---> Starting munged ..."
     gosu munge /usr/sbin/munged --force
     sleep 2  # give munged a moment to start
-
-# Setup NSS wrapper
+    # Setup NSS wrapper
     export LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
     export NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
     export NSS_WRAPPER_GROUP=/mnt/identity-store/global.group
     export SLURM_CONF=/etc/slurm/slurm.conf
 
-# Validate NSS files
-    if [[ ! -f "$NSS_WRAPPER_PASSWD" || ! -f "$NSS_WRAPPER_GROUP" ]]; then
-      echo "WARNING: NSS wrapper files not found, user resolution may fail"
+    # Create identity-store dir if missing
+    mkdir -p /mnt/identity-store
+
+    # Inject slurm identity if missing
+    if [[ ! -f "$NSS_WRAPPER_PASSWD" ]]; then
+      echo "Creating NSS_WRAPPER_PASSWD with slurm entry"
+      echo 'slurm:x:999:999::/home/slurm:/bin/bash' > "$NSS_WRAPPER_PASSWD"
     fi
+
+    if [[ ! -f "$NSS_WRAPPER_GROUP" ]]; then
+      echo "Creating NSS_WRAPPER_GROUP with slurm group"
+      echo 'slurm:x:999:' > "$NSS_WRAPPER_GROUP"
+    fi
+
+    # Validate resolution
+    getent passwd slurm || echo "WARNING: slurm user still not resolvable"
+
 
 # Wait for slurmctld
     echo "---> Waiting for slurmctld to become available..."

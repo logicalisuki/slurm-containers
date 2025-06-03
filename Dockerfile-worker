@@ -52,6 +52,12 @@ ENV LANG en_GB.UTF-8
 ENV LANGUAGE en_GB:en
 ENV LC_ALL en_GB.UTF-8
 
+
+# Updating envs for LD_PRELOAD
+ENV LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
+ENV NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
+ENV NSS_WRAPPER_GROUP=/mnt/identity-store/global.group
+
 # Create a Virtual Environment for Python packages
 RUN python3 -m venv /opt/venv
 

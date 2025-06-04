@@ -38,30 +38,21 @@ then
 
 elif [ "$CMD" = "slurmctld" ]
 then
-
     start_munge
 
     echo "---> Waiting for slurmdbd to become active before starting slurmctld ..."
-
     until 2>/dev/null >/dev/tcp/slurmdbd/6819
     do
-        echo "-- slurmdbd is not available.  Sleeping ..."
+        echo "-- slurmdbd is not available. Sleeping ..."
         sleep 2
     done
     echo "-- slurmdbd is now active ..."
-
-    # Validate resolution
-    getent passwd slurm || echo "WARNING: slurm user still not resolvable"
-    echo "---> Setting permissions for state directory and other slurm logs..."
-    mkdir -p /var/log/slurm /var/run/slurmd
-    touch /var/log/slurm/slurmctld.log /var/log/slurm/jobcomp.log
-    chown -R slurm:slurm /var/log/slurm /var/run/slurmd
-    chown slurm:slurm /var/spool/slurmctld
 
     # Start MUNGE
     echo "---> Starting munged ..."
     gosu munge /usr/sbin/munged --force
     sleep 2  # give munged a moment to start
+
     # Setup NSS wrapper
     export LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
     export NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
@@ -82,13 +73,20 @@ then
       echo 'slurm:x:999:' > "$NSS_WRAPPER_GROUP"
     fi
 
-    
+    # Validate resolution
+    getent passwd slurm || echo "WARNING: slurm user still not resolvable"
+
+    echo "---> Setting permissions for state directory and other slurm logs..."
+    mkdir -p /var/log/slurm /var/run/slurmd /var/spool/slurmctld
+    touch /var/log/slurm/slurmctld.log /var/log/slurm/jobcomp.log
+    chown -R slurm:slurm /var/log/slurm /var/run/slurmd
+    chown slurm:slurm /var/spool/slurmctld
+
     echo "---> Copying JWT key from mounted secret ..."
     mkdir -p /var/spool/slurm
     cp /etc/secrets/jwt_hs256.key /var/spool/slurm/jwt_hs256.key
     chown slurm:slurm /var/spool/slurm/jwt_hs256.key
     chmod 600 /var/spool/slurm/jwt_hs256.key
-    SLURMCTLD=$(which slurmctld)
 
     echo "---> Starting the Slurm Controller Daemon (slurmctld) ..."
     if /usr/local/slurm/sbin/slurmctld -V | grep -q '17.02' ; then

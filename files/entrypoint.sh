@@ -120,7 +120,6 @@ then
 
     echo "---> Preparing slurmd state directories ..."
     mkdir -p /var/run/slurmd /var/spool/slurmd /var/log/slurm
-    chown -R slurm:slurm /var/run/slurmd /var/spool/slurmd /var/log/slurm
 # Start MUNGE
     echo "---> Starting munged ..."
     gosu munge /usr/sbin/munged --force
@@ -144,7 +143,7 @@ then
       echo "Creating NSS_WRAPPER_GROUP with slurm group"
       echo 'slurm:x:999:' > "$NSS_WRAPPER_GROUP"
     fi
-
+    chown -R slurm:slurm /var/run/slurmd /var/spool/slurmd /var/log/slurm
     # Validate resolution
     getent passwd slurm || echo "WARNING: slurm user still not resolvable"
 

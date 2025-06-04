@@ -50,6 +50,14 @@ then
     done
     echo "-- slurmdbd is now active ..."
 
+    # Validate resolution
+    getent passwd slurm || echo "WARNING: slurm user still not resolvable"
+    echo "---> Setting permissions for state directory and other slurm logs..."
+    mkdir -p /var/log/slurm /var/run/slurmd
+    touch /var/log/slurm/slurmctld.log /var/log/slurm/jobcomp.log
+    chown -R slurm:slurm /var/log/slurm /var/run/slurmd
+    chown slurm:slurm /var/spool/slurmctld
+
     # Start MUNGE
     echo "---> Starting munged ..."
     gosu munge /usr/sbin/munged --force
@@ -73,14 +81,6 @@ then
       echo "Creating NSS_WRAPPER_GROUP with slurm group"
       echo 'slurm:x:999:' > "$NSS_WRAPPER_GROUP"
     fi
-
-    # Validate resolution
-    getent passwd slurm || echo "WARNING: slurm user still not resolvable"
-    echo "---> Setting permissions for state directory and other slurm logs..."
-    mkdir -p /var/log/slurm /var/run/slurmd
-    touch /var/log/slurm/slurmctld.log /var/log/slurm/jobcomp.log
-    chown -R slurm:slurm /var/log/slurm /var/run/slurmd
-    chown slurm:slurm /var/spool/slurmctld
 
     
     echo "---> Copying JWT key from mounted secret ..."

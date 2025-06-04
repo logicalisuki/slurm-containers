@@ -53,29 +53,6 @@ then
     gosu munge /usr/sbin/munged --force
     sleep 2  # give munged a moment to start
 
-    # Setup NSS wrapper
-    export LD_PRELOAD=/lib/x86_64-linux-gnu/libnss_wrapper.so
-    export NSS_WRAPPER_PASSWD=/mnt/identity-store/global.passwd
-    export NSS_WRAPPER_GROUP=/mnt/identity-store/global.group
-    export SLURM_CONF=/etc/slurm/slurm.conf
-
-    # Create identity-store dir if missing
-    mkdir -p /mnt/identity-store
-
-    # Inject slurm identity if missing
-    if [[ ! -f "$NSS_WRAPPER_PASSWD" ]]; then
-      echo "Creating NSS_WRAPPER_PASSWD with slurm entry"
-      echo 'slurm:x:999:999::/home/slurm:/bin/bash' > "$NSS_WRAPPER_PASSWD"
-    fi
-
-    if [[ ! -f "$NSS_WRAPPER_GROUP" ]]; then
-      echo "Creating NSS_WRAPPER_GROUP with slurm group"
-      echo 'slurm:x:999:' > "$NSS_WRAPPER_GROUP"
-    fi
-
-    # Validate resolution
-    getent passwd slurm || echo "WARNING: slurm user still not resolvable"
-
     echo "---> Setting permissions for state directory and other slurm logs..."
     mkdir -p /var/log/slurm /var/run/slurmd /var/spool/slurmctld
     touch /var/log/slurm/slurmctld.log /var/log/slurm/jobcomp.log

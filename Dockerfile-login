@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
         python3-venv \
         libpam-modules \
         libpam-modules-bin \
+	libibverbs-dev \
         openssh-server \
         krb5-user \
 	lua5.3 \

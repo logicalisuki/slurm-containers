@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
         libpam-modules-bin \
 	libibverbs-dev \
         openssh-server \
+	openssh-sftp-server \
         krb5-user \
 	lua5.3 \
 	lmod \

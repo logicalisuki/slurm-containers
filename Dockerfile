@@ -1,5 +1,5 @@
 # Base Image for Slurm Compilation from Nvidia
-FROM nvidia/cuda:12.9.0-base-ubuntu24.04 AS slurm-base
+FROM nvidia/cuda:12.9.0-devel-ubuntu24.04 AS slurm-base
 ENV TZ=Europe/London
 ENV DEBIAN_FRONTEND=noninteractive
 # Install dependencies for building Slurm and required PAM modules

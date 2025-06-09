@@ -1,6 +1,7 @@
 # Base Image for Slurm Compilation from Nvidia
 FROM nvidia/cuda:12.2.0-base-ubuntu20.04 AS slurm-base
-# Install dependencies for building Slurm
+ENV TZ=Europe/London
+ENV DEBIAN_FRONTEND=noninteractive
 # Install dependencies for building Slurm and required PAM modules
 RUN apt-get update && apt-get install -y  --no-install-recommends\
     libnss-wrapper \

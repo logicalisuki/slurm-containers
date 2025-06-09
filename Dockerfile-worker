@@ -27,18 +27,11 @@ RUN apt-get update && apt-get install -y \
         libibverbs-dev \
         openssh-server \
         krb5-user \
-        man \
-        manpages \
-        manpages-dev \
-        emacs-nox \
-        less \
-        groff \
         locales \
         nano \
-        vim-tiny \
-        mc \
         lua5.3 \
         lmod \
+        btop \
         htop \
         iotop \
         build-essential \
@@ -54,13 +47,6 @@ RUN apt-get update && apt-get install -y \
 ENV LANG en_GB.UTF-8
 ENV LANGUAGE en_GB:en
 ENV LC_ALL en_GB.UTF-8
-
-# Making sure that slurm user exists
-# Add Slurm user and group
-# Add slurm user if it doesn't exist
-
-RUN getent passwd slurm || echo "slurm user not found"
-RUN getent group slurm || echo "slurm group not found"
 
 # Create a Virtual Environment for Python packages
 RUN python3 -m venv /opt/venv

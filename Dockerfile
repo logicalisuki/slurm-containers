@@ -61,6 +61,18 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
     make install && \
     rm -rf /tmp/slurm-${SLURM_VERSION}*
 
+
+RUN apt-get purge -y \
+    build-essential \
+    libjson-c-dev \
+    libhttp-parser-dev \
+    libjansson-dev \
+    libssl-dev \
+    libpam0g-dev \
+    libjwt-dev \
+    libmariadb-dev-compat \
+ && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Ensure the slurm group and user exist
 RUN getent group slurm || groupadd -r slurm && \
     id -u slurm || useradd -r -g slurm slurm

@@ -13,115 +13,134 @@ env:
   DOCKERHUB_PAT: ${{ secrets.DOCKER_PAT }}
 
 jobs:
-  build:
+  detect-changes:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-
+    outputs:
+      base: ${{ steps.filter.outputs.base }}
+      controller: ${{ steps.filter.outputs.controller }}
+      database: ${{ steps.filter.outputs.database }}
+      worker: ${{ steps.filter.outputs.worker }}
+      login: ${{ steps.filter.outputs.login }}
+      adcli: ${{ steps.filter.outputs.adcli }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Filter changes
+        id: filter
+        uses: dorny/paths-filter@v3
         with:
-          ref: main
+          filters: |
+            base:
+              - Dockerfile
+              - files/entrypoint.sh
+            controller:
+              - Dockerfile-controller
+            database:
+              - Dockerfile-database
+            worker:
+              - Dockerfile-worker
+              - files/entrypoint.sh
+            login:
+              - Dockerfile-login
+            adcli:
+              - Dockerfile-adcli
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: |
+      needs.detect-changes.outputs.base == 'true' ||
+      needs.detect-changes.outputs.controller == 'true' ||
+      needs.detect-changes.outputs.database == 'true' ||
+      needs.detect-changes.outputs.worker == 'true' ||
+      needs.detect-changes.outputs.login == 'true' ||
+      needs.detect-changes.outputs.adcli == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - base
+          - controller
+          - database
+          - worker
+          - login
+          - adcli
+        include:
+          - image: base
+            file: Dockerfile
+            context: .
+            tag: slurm-base
+            changed: ${{ needs.detect-changes.outputs.base }}
+          - image: controller
+            file: Dockerfile-controller
+            context: .
+            tag: slurm-controller
+            changed: ${{ needs.detect-changes.outputs.controller }}
+          - image: database
+            file: Dockerfile-database
+            context: .
+            tag: slurm-database
+            changed: ${{ needs.detect-changes.outputs.database }}
+          - image: worker
+            file: Dockerfile-worker
+            context: .
+            tag: slurm-worker
+            changed: ${{ needs.detect-changes.outputs.worker }}
+          - image: login
+            file: Dockerfile-login
+            context: .
+            tag: slurm-login
+            changed: ${{ needs.detect-changes.outputs.login }}
+          - image: adcli
+            file: Dockerfile-adcli
+            context: .
+            tag: slurm-adcli
+            changed: ${{ needs.detect-changes.outputs.adcli }}
+    steps:
+      - name: Skip if image did not change
+        if: matrix.changed != 'true'
+        run: echo "No changes for ${matrix.image}, skipping."
+
+      - name: Checkout repository
+        if: matrix.changed == 'true'
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
+        if: matrix.changed == 'true'
         uses: docker/setup-buildx-action@v3
 
-      ####################
-      # DockerHub Login
-      ####################
+      - name: Prune previous Docker layers
+        if: matrix.changed == 'true'
+        run: |
+          docker builder prune -f
+          docker system prune -a -f --volumes
+
       - name: Log in to DockerHub
+        if: matrix.changed == 'true'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.DOCKERHUB_REGISTRY }}
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ env.DOCKERHUB_PAT }}
 
-      ####################
-      # GHCR Login
-      ####################
-      - name: Log in to GitHub Container Registry
+      - name: Log in to GHCR
+        if: matrix.changed == 'true'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      ####################
-      # Shared build template (base, controller, etc.)
-      ####################
-
-      - name: Build and push all images
+      - name: Build and push ${{ matrix.tag }}
+        if: matrix.changed == 'true'
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
           push: true
           platforms: linux/amd64
           tags: |
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/slurm-base:latest
-            ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/slurm-base:latest
+            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/${{ matrix.tag }}:latest
+            ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/${{ matrix.tag }}:latest
           cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push controller
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile-controller
-          push: true
-          tags: |
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/slurm-controller:latest
-            ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/slurm-controller:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push database
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile-database
-          push: true
-          tags: |
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/slurm-database:latest
-            ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/slurm-database:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push worker
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile-worker
-          push: true
-          tags: |
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/slurm-worker:latest
-            ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/slurm-worker:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push login
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile-login
-          push: true
-          tags: |
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/slurm-login:latest
-            ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/slurm-login:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push adcli
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile-adcli
-          push: true
-          tags: |
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/slurm-adcli:latest
-            ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/slurm-adcli:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 

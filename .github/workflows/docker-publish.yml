@@ -96,10 +96,11 @@ jobs:
             context: .
             tag: slurm-adcli
             changed: ${{ needs.detect-changes.outputs.adcli }}
+
     steps:
       - name: Skip if image did not change
         if: matrix.changed != 'true'
-        run: echo "No changes for ${matrix.image}, skipping."
+        run: echo "No changes for ${{ matrix.image }}, skipping."
 
       - name: Checkout repository
         if: matrix.changed == 'true'
@@ -143,4 +144,3 @@ jobs:
             ${{ env.DOCKERHUB_REGISTRY }}/${{ env.DOCKERHUB_USERNAME }}/${{ matrix.tag }}:latest
             ${{ env.GHCR_REGISTRY }}/${{ github.repository }}/${{ matrix.tag }}:latest
           cache-from: type=gha
-

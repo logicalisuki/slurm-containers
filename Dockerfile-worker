@@ -22,12 +22,7 @@ RUN apt-get update && apt-get install -y \
         libmunge-dev \
         python3-pip \
         python3-venv \
-        libpam-modules \
-        libpam-modules-bin \
         libibverbs-dev \
-        openssh-server \
-        krb5-user \
-        locales \
         nano \
         lua5.3 \
         lmod \

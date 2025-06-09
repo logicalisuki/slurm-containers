@@ -19,7 +19,6 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     openssl \
     openssh-client \
     libjwt-dev \
-    vim \
     sssd \
     mariadb-client \
     mariadb-server \

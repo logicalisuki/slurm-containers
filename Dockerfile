@@ -7,8 +7,6 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     libnss-wrapper \
     build-essential \
     curl \
-    nvidia-cuda-toolkit \
-    nvidia-utils-570 \
     libjson-c-dev \
     libhttp-parser-dev \
     libmunge-dev \

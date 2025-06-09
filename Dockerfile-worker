@@ -33,7 +33,6 @@ RUN apt-get update && apt-get install -y \
         emacs-nox \
         less \
         groff \
-        nvidia-utils-570 \
         locales \
         nano \
         vim-tiny \

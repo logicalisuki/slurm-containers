@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     openssh-client \
     libjwt-dev \
     sssd \
+    vim \
     mariadb-client \
     mariadb-server \
     libmariadb-dev-compat \

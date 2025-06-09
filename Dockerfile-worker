@@ -41,7 +41,6 @@ RUN apt-get update && apt-get install -y \
         lua5.3 \
         lmod \
         htop \
-        btop \
         iotop \
         build-essential \
         libmpfr-dev \

@@ -35,15 +35,19 @@ jobs:
               - files/entrypoint.sh
             controller:
               - Dockerfile-controller
+              - files/entrypoint.sh
             database:
               - Dockerfile-database
+              - files/entrypoint.sh
             worker:
               - Dockerfile-worker
               - files/entrypoint.sh
             login:
               - Dockerfile-login
+              - files/entrypoint.sh
             adcli:
               - Dockerfile-adcli
+              - files/entrypoint.sh
 
   build-and-push:
     runs-on: ubuntu-latest

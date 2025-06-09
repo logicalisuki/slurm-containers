@@ -172,9 +172,9 @@ elif [ "$CMD" = "check-queue-hook" ]
 then
     start_munge
 
-    scontrol update NodeName=all State=DRAIN Reason="Preventing new jobs running before upgrade"
+    SLURM_CONF=/etc/slurm/slurm.conf scontrol update NodeName=all State=DRAIN Reason="Preventing new jobs running before upgrade"
 
-    RUNNING_JOBS=$(squeue --states=RUNNING,COMPLETING,CONFIGURING,RESIZING,SIGNALING,STAGE_OUT,STOPPED,SUSPENDED --noheader --array | wc --lines)
+    RUNNING_JOBS=$(SLURM_CONF=/etc/slurm/slurm.conf squeue --states=RUNNING,COMPLETING,CONFIGURING,RESIZING,SIGNALING,STAGE_OUT,STOPPED,SUSPENDED --noheader --array | wc --lines)
 
     if [[ $RUNNING_JOBS -eq 0 ]]
     then

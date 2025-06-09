@@ -1,15 +1,13 @@
-#FROM ubuntu:24.04
-#RUN apt-get update -y &&  apt-get install build-essential fakeroot devscripts equivs wget -y
-##downloading and installing a version of slurm
-#RUN wget https://download.schedmd.com/slurm/slurm-24.11.0-0rc2.tar.bz2 && tar -xaf slurm-24.11.0-0rc2.tar.bz2 && cd slurm-24.11.0-0rc2 && mk-build-deps -i debian/control && debuild -b -uc -us 
-# Base Image for Slurm Compilation
-FROM ubuntu:24.04 AS slurm-base
+# Base Image for Slurm Compilation from Nvidia
+FROM nvidia/cuda:12.2.0-base-ubuntu20.04 AS slurm-base
 # Install dependencies for building Slurm
 # Install dependencies for building Slurm and required PAM modules
 RUN apt-get update && apt-get install -y  --no-install-recommends\
     libnss-wrapper \
     build-essential \
     curl \
+    nvidia-cuda-toolkit \
+    nvidia-utils-570 \
     libjson-c-dev \
     libhttp-parser-dev \
     libmunge-dev \

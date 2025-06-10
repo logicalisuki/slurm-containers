@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         emacs-nox \
         less \
         groff \
+        ca-certificates \
         locales \
         nano \
         lua5.3 \

@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     libssl-dev \
     libjson-c-dev \
     libjansson-dev \
+    ca-certificates \
     libhttp-parser-dev \
     libjwt-dev \
     libmariadb-dev-compat \

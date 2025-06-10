@@ -46,6 +46,13 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
 
+# Add Entrypoint 
+ADD ./files/entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Add Slurm to PATH
+ENV PATH="/usr/local/slurm/bin:/usr/local/slurm/sbin:$PATH"
+
 # Final clean-up (optional if multi-stage)
 RUN apt-get purge -y \
     build-essential \

@@ -192,8 +192,8 @@ then
 elif [ "$CMD" = "generate-keys-hook" ]
 then
     mkdir -p ./temphostkeys/etc/ssh
-    ssh-keygen -A -f ./temphostkeys
-    kubectl create secret generic host-keys-secret \
+    /usr/bin/ssh-keygen -A -f ./temphostkeys
+    /usr/local/bin/kubectl create secret generic host-keys-secret \
     --dry-run=client \
     --from-file=./temphostkeys/etc/ssh \
     -o yaml | \

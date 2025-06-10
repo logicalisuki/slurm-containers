@@ -22,7 +22,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libmunge-dev \
         python3-pip \
         python3-venv \
-        libibverbs-dev \
+        libpam-modules \
+        libpam-modules-bin \
+	libibverbs-dev \
+        openssh-server \
+        krb5-user \
+        man \
+        manpages \
+        manpages-dev \
+        emacs-nox \
+        less \
+        groff \
+        locales \
         nano \
         lua5.3 \
         lmod \

@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y  --no-install-recommends\
     libnss-wrapper \
     build-essential \
     curl \
+    python3-pip \
+    python3-venv \
     libjson-c-dev \
     libhttp-parser-dev \
     libmunge-dev \

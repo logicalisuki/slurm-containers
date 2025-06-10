@@ -41,6 +41,11 @@ RUN curl -LO https://download.schedmd.com/slurm/slurm-${SLURM_VERSION}.tar.bz2 &
     make -j$(nproc) && make install && \
     cd / && rm -rf /tmp/slurm-${SLURM_VERSION}*
 
+# Install kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+RUN chmod +x ./kubectl
+RUN mv ./kubectl /usr/local/bin/kubectl
+
 # Final clean-up (optional if multi-stage)
 RUN apt-get purge -y \
     build-essential \

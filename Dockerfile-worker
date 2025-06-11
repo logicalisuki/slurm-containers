@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         lmod \
         htop \
         iotop \
+        gosu \
         build-essential \
         libmpfr-dev \
         libgmp-dev \

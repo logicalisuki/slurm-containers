@@ -35,10 +35,6 @@ RUN /opt/venv/bin/pip install --upgrade pip
 # Install EasyBuild using pipx inside the virtual environment
 RUN /opt/venv/bin/pip install EasyBuild
 
-# Adding certs for UNN
-COPY ./files/UNN-CERTS/NP-PKI-ROOTCA-CA-1.crt /usr/local/share/ca-certificates/
-RUN update-ca-certificates
-
 # Set Timezone
 RUN rm -rf /etc/localtime && ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 

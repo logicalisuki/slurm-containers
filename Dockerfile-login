@@ -8,16 +8,12 @@ RUN apt-get update && apt-get install -y \
         python3-venv \
         libpam-modules \
         libpam-modules-bin \
-	libibverbs-dev \
+        libibverbs-dev \
         openssh-server \
-	openssh-sftp-server \
+        openssh-sftp-server \
         krb5-user \
-	lua5.3 \
-	lmod \
-        tmux && \
-        yes | unminimize && \
-        locale-gen en_GB.UTF-8 && \
-        update-locale LANG=en_GB.UTF-8 && \
+        lua5.3 \
+        lmod && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists/*
 

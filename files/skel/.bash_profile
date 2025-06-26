@@ -8,5 +8,3 @@ fi
 # You can add login-specific settings here if needed
 # e.g., load SSH keys or display login message
 
-# Custom message
-echo "Welcome to the higgs"
